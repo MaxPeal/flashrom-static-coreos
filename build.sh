@@ -4,10 +4,18 @@ mkdir -pv $WORKDIR
 VER=$(grep "ENV VER" Dockerfile | grep -v '^[[:space:]]*#' | cut -d" " -f3)
 PROG=$(grep "ENV PROG" Dockerfile | grep -v '^[[:space:]]*#' | cut -d" " -f3)
 OSv=$(grep "ENV OSv" Dockerfile | grep -v '^[[:space:]]*#' | cut -d" " -f3)
+USERv=$(grep "ENV user" Dockerfile | grep -v '^[[:space:]]*#' | cut -d" " -f3)
+BUILDdir=$(grep "ENV BUILDdir" Dockerfile | grep -v '^[[:space:]]*#' | cut -d" " -f3)
 #docker build --no-cache -t screen-static-coreos:latest .
 docker build -t $PROG-static-$OSv:latest .
-docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest cp -v /home/core/$PROG-$VER/$PROG /mnt
-docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest cp -v /home/core/$PROG-$VER/$PROG-upx /mnt
+#docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest cp -v /home/core/$PROG-$VER/$PROG /mnt
+#docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest cp -v /home/core/$PROG-$VER/$PROG-upx /mnt
+
+#docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest cp -v /home/core/$PROG-$VER/$PROG /mnt
+#set
+#docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest ls -latrR /mnt /home
+docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest cp -v $BUILDdir/$PROG /mnt
+docker run -v $WORKDIR:/mnt $PROG-static-$OSv:latest cp -v $BUILDdir/$PROG-upx /mnt
 mv $WORKDIR/$PROG $WORKDIR/$PROG-non-upx
 mv $WORKDIR/$PROG-upx $WORKDIR/$PROG
 
